@@ -2,7 +2,6 @@ package plumber;
 
 public class Game 
 {
-
     /**
      * @param args Arguments to the program - can be ignored
      */
@@ -10,5 +9,5 @@ public class Game
     {
         // TODO Auto-generated method stub
         //test
-	}
+    }
 }
