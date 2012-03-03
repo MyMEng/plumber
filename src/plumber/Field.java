@@ -1,39 +1,50 @@
 package plumber;
 
-import java.awt.Graphics2D;
+import java.awt.*;
 import java.awt.image.BufferedImage;
-import java.io.*;
-import java.net.URL;
-import javax.imageio.ImageIO;
+import javax.swing.JComponent;
 
-public class Field
+public class Field extends JComponent
 {
-    private int x;
-    private int y;
     private int size;
     private BufferedImage img;
+    private Rectangle imageRect;
+    private TexturePaint texturePaint;
+    private boolean active;
 
     public Field(int x, int y, int size, String textureName)
     {
-        this.x = x;
-        this.y = y;
         this.size = size;
-        URL u = null;
-        try
-        {
-            u = this.getClass().getResource("gfx/" + textureName);
-            this.img = ImageIO.read(u);
-        }
-        catch(Exception ex)
-        {
-            System.err.print(u);
-            throw new Error("Error while reading from a file: " + ex.getMessage());
-        }
+        this.active = false;
+        img = TextureManager.get(textureName);
+        imageRect = new Rectangle(x, y, size, size);
+        texturePaint = new TexturePaint(img, imageRect);
     }
 
-    public void draw(Graphics2D g)
+    @Override public void paintComponent(Graphics g)
     {
+        super.paintComponent(g);
+        Graphics2D g2d = (Graphics2D)g;
+        g2d.setPaint(texturePaint);
         
-        g.drawImage(img, x, y, size, size, null);
+        if(!active)
+            g2d.fill(imageRect);
+    }
+    
+    public void setActive(boolean value)
+    {
+        if(value == active)
+            return;
+        
+        active = value;
+        repaint();
+    }
+
+    public boolean contains(int x, int y)
+    {
+        return imageRect.contains((double)x, (double)y);
+    }
+    public void changeOpacity(int x, int y)
+    {
     }
 }
